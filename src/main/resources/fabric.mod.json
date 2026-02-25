@@ -11,7 +11,10 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.github.noamm9.untitled.Untitled"
+      {
+        "value": "com.github.noamm9.untitled.Untitled",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
