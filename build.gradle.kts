@@ -88,3 +88,20 @@ publishing {
         }
     }
 }
+
+loom {
+    runConfigs.named("client") {
+        isIdeConfigGenerated = true
+        vmArg("-XX:+AllowEnhancedClassRedefinition")
+    }
+
+    runConfigs.named("server") {
+        isIdeConfigGenerated = false
+    }
+}
+
+afterEvaluate {
+    loom.runs.named("client") {
+        vmArg("-javaagent:${configurations.compileClasspath.get().find { "sponge-mixin" in it.name }}")
+    }
+}
