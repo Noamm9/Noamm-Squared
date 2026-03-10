@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.annotationProcessor
 import org.gradle.kotlin.dsl.implementation
 import org.gradle.kotlin.dsl.include
 import org.gradle.kotlin.dsl.mappings
@@ -48,6 +49,12 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    implementation("io.github.llamalad7:mixinextras-fabric:0.4.1")
+    annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")
+
+    implementation("org.java-websocket:Java-WebSocket:1.5.4")
+    include("org.java-websocket:Java-WebSocket:1.5.4")
 
     modImplementation("com.github.noamm9:noammaddons-1.21.10:${project.property("noammaddons_version")}") {
         isTransitive = false
