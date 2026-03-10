@@ -58,7 +58,7 @@ object ExampleFeature : Feature(
     }
 
     override fun init() {
-        // register you events here. They will automatically unregister when the feature is toggled off
+        // register your events here. They will automatically unregister when the feature is toggled off
 
         register<TickEvent.Start> {
             val player = mc.player ?: return@register
