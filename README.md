@@ -1,4 +1,4 @@
-# 🛠️ NoammAddons's Addon Mod Template
+# NoammAddons's Addon Mod Template
 
 ### Project-Specific Notes
 - In gradle.properties, set noammaddons-version to the version you want to build upon.
