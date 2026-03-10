@@ -5,6 +5,6 @@ import net.fabricmc.api.ClientModInitializer
 
 object Untitled: ClientModInitializer {
     override fun onInitializeClient() {
-        NoammAddons.logger.info("Hi from Addon!")
+        NoammAddons.logger.info("Hi from ${this.javaClass.simpleName}!")
     }
 }

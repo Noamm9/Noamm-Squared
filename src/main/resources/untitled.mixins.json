@@ -4,6 +4,7 @@
   "package": "com.github.noamm9.untitled.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "MixinCategoryType"
   ],
   "client": [
     "MixinMinecraft"
