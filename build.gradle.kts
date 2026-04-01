@@ -44,21 +44,10 @@ dependencies {
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
 
-    implementation ("io.github.classgraph:classgraph:4.8.174")
-    include ("io.github.classgraph:classgraph:4.8.174")
-
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
-    implementation("io.github.llamalad7:mixinextras-fabric:0.4.1")
-    annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")
-
-    implementation("org.java-websocket:Java-WebSocket:1.5.4")
-    include("org.java-websocket:Java-WebSocket:1.5.4")
-
-    modImplementation("com.github.noamm9:noammaddons-1.21.10:${project.property("noammaddons_version")}") {
-        isTransitive = false
-    }
+    modImplementation("com.github.Noamm9.NoammAddons:${project.property("noammaddons_type")}:${project.property("noammaddons_version")}")
 }
 
 tasks.processResources {
