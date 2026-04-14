@@ -60,7 +60,7 @@ public class MixinCategoryType {
             unsafe.putObject(base, offset, newEntries);
 
         } catch (Exception e) {
-            NoammAddons.INSTANCE.getLogger().error("Error while adding custom category type", e);
+            NoammAddons.logger.error("Error while adding custom category type", e);
             e.printStackTrace();
         }
     }

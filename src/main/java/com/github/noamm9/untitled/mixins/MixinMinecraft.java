@@ -22,6 +22,6 @@ import java.util.Arrays;
 public class MixinMinecraft {
     @Inject(method = "setLevel", at = @At("HEAD"))
     public void onSetLevel(ClientLevel clientLevel, CallbackInfo ci) {
-        NoammAddons.INSTANCE.getLogger().info("Hi From Example Mixins");
+        NoammAddons.logger.info("Hi From Example Mixins");
     }
 }
