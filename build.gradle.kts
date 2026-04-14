@@ -47,7 +47,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
-    modImplementation("com.github.Noamm9.NoammAddons:${project.property("noammaddons_type")}:${project.property("noammaddons_version")}")
+    modImplementation("com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${project.property("noammaddons_type")}")
 }
 
 tasks.processResources {
