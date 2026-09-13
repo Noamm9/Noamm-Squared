@@ -28,7 +28,18 @@ java {
 
 repositories {
     maven { url = uri("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") }
-    maven { url = uri("https://jitpack.io") }
+    maven("https://repo.essential.gg/repository/maven-public") {
+        name = "Essential"
+        content {
+            includeGroup("gg.essential")
+        }
+    }
+    maven("https://jitpack.io") {
+        name = "JitPack"
+        content {
+            includeGroup("com.github.Noamm9")
+        }
+    }
 }
 
 dependencies {

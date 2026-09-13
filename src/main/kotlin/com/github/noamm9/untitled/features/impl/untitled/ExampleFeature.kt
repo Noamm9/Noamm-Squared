@@ -1,12 +1,18 @@
 package com.github.noamm9.untitled.features.impl.untitled
 
+import com.github.noamm9.config.types.ButtonSetting
+import com.github.noamm9.config.types.ColorSetting
+import com.github.noamm9.config.types.DropdownSetting
+import com.github.noamm9.config.types.ToggleSetting
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.ui.clickgui.components.impl.*
+import com.github.noamm9.ui.utils.Resolution
 import com.github.noamm9.utils.ChatUtils
 import com.github.noamm9.utils.render.Render2D
-import com.github.noamm9.utils.render.Render2D.width
-import com.github.noamm9.utils.render.Render2D.height
+import com.github.noamm9.utils.render.Render2D.drawCenteredString
+import com.github.noamm9.utils.render.RenderHelper.height
+import com.github.noamm9.utils.render.RenderHelper.width
+
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import java.awt.Color
 
@@ -48,8 +54,12 @@ object ExampleFeature : Feature(
         val text = if (isExample) "[Sprinting]"
         else if (mc.player?.isSprinting == true) "[Sprinting]" else "[Walking]"
 
-        Render2D.drawCenteredString(context, text, 0, 0, textColor.value)
+        context.drawCenteredString(text, 0, 0, textColor.value)
         return@hudElement text.width().toFloat() to text.height().toFloat()
+    } defaults {
+        scale = 3f
+        x = Resolution.width / 2
+        x = Resolution.height / 2
     }
 
     override fun init() {
