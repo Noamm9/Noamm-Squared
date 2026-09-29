@@ -26,5 +26,8 @@
     "fabric-api": "*",
     "noammaddons": "${noammaddons_version}",
     "minecraft": "${minecraft_version}"
+  },
+  "conflicts": {
+    "untitled": "*"
   }
 }
