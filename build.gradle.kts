@@ -5,10 +5,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.3.21"
+    kotlin("jvm") version "2.4.21"
     id("net.fabricmc.fabric-loom") version "1.16.2"
     id("maven-publish")
-    id ("org.jetbrains.kotlin.plugin.serialization") version "2.3.21"
+    id ("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
 }
 
 version = project.property("mod_version") as String
@@ -54,7 +54,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
-    implementation("com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${project.property("noammaddons_type")}")
+    implementation("com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${project.property("noammaddons_type")}") {
+        isTransitive = false
+    }
 }
 
 tasks.processResources {
