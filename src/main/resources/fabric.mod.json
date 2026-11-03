@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "untitled",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "untitled",
+  "name": "${mod_name}",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/untitled/icon.png",
+  "icon": "assets/${mod_id}/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -18,13 +18,14 @@
     ]
   },
   "mixins": [
-    "untitled.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric-language-kotlin": ">=${kotlin_loader_version}",
+    "fabric-language-kotlin": ">=${fabric_kotlin_version}",
     "fabric-api": "*",
     "noammaddons": "${noammaddons_version}",
+    "java": ">=${java_version}",
     "minecraft": "${minecraft_version}"
   }
 }

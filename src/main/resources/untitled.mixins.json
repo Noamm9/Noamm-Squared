@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.github.noamm9.untitled.mixins",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_${java_version}",
   "mixins": [
     "MixinCategoryType"
   ],
