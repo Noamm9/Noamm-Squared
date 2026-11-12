@@ -1,46 +1,22 @@
-# gradle
-
+# Gradle and Kotlin
 .gradle/
+.kotlin/
 build/
-out/
-classes/
 
-# eclipse
-
-*.launch
-
-# idea
-
+# Local IDE files
 .idea/
-*.iml
-*.ipr
-*.iws
-
-# vscode
-
-.settings/
 .vscode/
-bin/
-.classpath
-.project
+*.iml
+/out/
 
-# macos
-
-*.DS_Store
-
-# fabric
-
+# Minecraft runtime data
 run/
 
-# java
-
+# JVM diagnostics
 hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
 
-.kotlin/
-/.kotlin
-/.kotlin
-*.salive
-/logs
+# OS metadata
+.DS_Store

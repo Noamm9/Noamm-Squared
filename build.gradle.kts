@@ -1,28 +1,48 @@
-import org.gradle.kotlin.dsl.annotationProcessor
-import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.4.21"
-    id("net.fabricmc.fabric-loom") version "1.16.2"
+    kotlin("jvm")
+    id("net.fabricmc.fabric-loom")
     id("maven-publish")
+    idea
 }
+
+val minecraftVersion = stonecutter.current.version
+val targetJavaVersion = 25
+val noammAddonsVersion = project.property("noammaddons_version") as String
+val noammAddonsType = project.property("noammaddons_type") as String
+val modName = project.property("mod_name") as String
+val modId = project.property("mod_id") as String
 
 version = project.property("mod_version") as String
 group = project.property("maven_group") as String
 
 base {
-    archivesName.set(project.property("archives_base_name") as String)
+    archivesName.set(modName)
 }
 
-val targetJavaVersion = 25
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
+}
+
+if (System.getProperty("idea.sync.active").toBoolean() && !stonecutter.current.isActive) {
+    sourceSets.main {
+        java.setSrcDirs(emptyList<File>())
+        kotlin.setSrcDirs(emptyList<File>())
+    }
+}
+
+tasks.named("ideaSyncTask") {
+    dependsOn("stonecutterGenerate", "stonecutterGenerateTest")
+}
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    withSourcesJar()
 }
-
-
 
 repositories {
     maven { url = uri("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") }
@@ -41,68 +61,78 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
+    minecraft("com.mojang:minecraft:$minecraftVersion")
     implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    implementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
+    implementation("net.fabricmc:fabric-language-kotlin:${project.property("fabric_kotlin_version")}")
 
     implementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
-    runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
+    runtimeOnly("me.djtheredstoner:DevAuth-fabric:${project.property("devauth_version")}")
 
-    implementation("com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${project.property("minecraft_version")}-${project.property("noammaddons_type")}") {
+    implementation("com.github.Noamm9:NoammAddons:$noammAddonsVersion:$minecraftVersion-$noammAddonsType") {
         isTransitive = false
     }
 }
 
+val resourceProperties = mapOf(
+    "version" to project.version,
+    "mod_name" to modName,
+    "mod_id" to modId,
+    "minecraft_version" to minecraftVersion,
+    "java_version" to targetJavaVersion,
+    "loader_version" to project.property("loader_version"),
+    "fabric_kotlin_version" to project.property("fabric_kotlin_version"),
+    "noammaddons_version" to noammAddonsVersion
+)
+
 tasks.processResources {
-    inputs.property("version", project.version)
-    inputs.property("minecraft_version", project.property("minecraft_version"))
-    inputs.property("loader_version", project.property("loader_version"))
-    inputs.property("noammaddons_version", project.property("noammaddons_version"))
+    inputs.properties(resourceProperties)
     filteringCharset = "UTF-8"
 
-    filesMatching("fabric.mod.json") {
-        expand("version" to project.version, "minecraft_version" to project.property("minecraft_version")!!, "loader_version" to project.property("loader_version")!!, "kotlin_loader_version" to project.property("kotlin_loader_version")!!, "noammaddons_version" to project.property("noammaddons_version")!!)
+    filesMatching(listOf("fabric.mod.json", "$modId.mixins.json")) {
+        expand(resourceProperties)
     }
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(targetJavaVersion)
+    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:unchecked"))
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(JvmTarget.fromTarget(targetJavaVersion.toString()))
 }
 
+tasks.withType<Jar>().configureEach {
+    archiveVersion.set("${project.version}-$minecraftVersion")
+}
+
 tasks.jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
-    }
+    archiveClassifier.set(noammAddonsType)
+    destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 }
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = project.property("archives_base_name") as String
+            artifactId = modName
+            version = "${project.version}-$minecraftVersion"
             from(components["java"])
         }
     }
 }
 
 loom {
-    runConfigs.named("client") {
-        isIdeConfigGenerated = true
-        vmArg("-XX:+AllowEnhancedClassRedefinition")
-    }
-
-    runConfigs.named("server") {
-        isIdeConfigGenerated = false
-    }
-}
-
-afterEvaluate {
-    loom.runs.named("client") {
-        vmArg("-javaagent:${configurations.compileClasspath.get().find { "sponge-mixin" in it.name }}")
+    runs.configureEach {
+        runDirectory.set(layout.projectDirectory.dir("run"))
+        generateRunConfig.set(false)
+        jvmArguments.addAll(
+            "-XX:+AllowEnhancedClassRedefinition", // This is only available in JBR
+            "-XX:+IgnoreUnrecognizedVMOptions",
+        )
+        jvmArguments.add(provider {
+            "-javaagent:${configurations.compileClasspath.get().single { "sponge-mixin" in it.name }}"
+        })
     }
 }
